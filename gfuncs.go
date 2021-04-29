@@ -721,7 +721,7 @@ func LoadFile(fileName string, readSize *uint64) uintptr {
 		return 0
 	}
 	dllRawData, err := syscall.MapViewOfFile(mapping, syscall.FILE_MAP_READ, 0, 0, 0)
-	fmt.PrintLn(dllRawData)
+	fmt.Println(dllRawData)
 	if err != nil {
 		log.Println("Error MapViewOfFile: !", err.Error())
 		syscall.CloseHandle(mapping)
