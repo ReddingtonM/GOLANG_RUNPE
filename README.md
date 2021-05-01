@@ -2,3 +2,6 @@
 
 # Changes
 This fork disables verification of subsystem in file and changes it in injected file to ***IMAGE_SUBSYSTEM_NATIVE_WINDOWS*** to allow injections into svchost or other windows processes.
+
+# Why
+It allows RunPE to inject into svchost.exe,explorer.exe etc. 
