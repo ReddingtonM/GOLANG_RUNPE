@@ -1,4 +1,4 @@
-package main
+package RUNPE
 
 /*
 #include <string.h>
