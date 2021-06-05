@@ -102,10 +102,6 @@ func LoadPEModule(fileName string, vSize *uint64, executable, relocate bool) uin
 func LoadPEModuleByte(filebytes byte[], vSize *uint64) uintptr {
 	var rSize uint64
 	dllRawData := filebytes
-	if dllRawData == 0 {
-		log.Println("Cannot load the file: ", fileName)
-		return 0
-	}
 	rSize = len(filebytes)
 	mappedDll := _LoadPEModule(dllRawData, rSize, vSize, false, false)
 	FreePEBuffer(dllRawData, 0)
