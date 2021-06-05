@@ -1,4 +1,4 @@
-package RUNPE
+package main
 
 import "debug/pe"
 

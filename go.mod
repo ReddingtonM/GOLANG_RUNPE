@@ -1,3 +1,3 @@
-module github.com/syrex1013/GOLANG_RUNPE
+module gomem
 
 go 1.16

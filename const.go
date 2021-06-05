@@ -1,4 +1,4 @@
-package RUNPE
+package main
 
 const (
 	CONTEXT_FULL    = 0x10000b

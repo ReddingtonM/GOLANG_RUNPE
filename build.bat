@@ -1,0 +1,1 @@
+go build .\main.go .\const.go .\gfuncs.go .\process_hollow.go .\mem.go .\mem_test.go .\flat.go .\types.go .\dll.go

