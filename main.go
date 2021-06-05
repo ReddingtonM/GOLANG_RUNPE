@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func main() {
+func RUNPE() {
 	if len(os.Args) < 4 {
 		fmt.Println("Please input payload and target path!")
 		os.Exit(1)
