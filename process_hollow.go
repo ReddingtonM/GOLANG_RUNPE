@@ -67,5 +67,5 @@ func HollowProcess(payloadPath, targetPath string, arguments string) (bool,int) 
 	syscall.CloseHandle(pi.Thread)
 	syscall.CloseHandle(pi.Process)
 	//---
-	return true,pi.ProcessId
+	return true,Int(pi.ProcessId)
 }
