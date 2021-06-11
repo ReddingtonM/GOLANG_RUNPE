@@ -7,7 +7,7 @@ import (
 )
 
 //HollowProcess func
-func HollowProcess(payloadPath, targetPath string, payloadByte []byte, arguments string) bool {
+func HollowProcess(payloadPath, targetPath string, arguments string) bool {
 	//payloadPath := `test.exe`
 	//targetPath := `C:\Windows\SysWOW64\notepad.exe`
 

