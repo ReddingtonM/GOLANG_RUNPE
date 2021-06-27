@@ -98,15 +98,15 @@ func LoadPeModuleInMemory(payloadbyte []byte, vSize *uint64) uintptr {
 		log.Println("Cannot load the file")
 		return 0
 	}
-	var data2 []byte
-	sh := (*reflect.SliceHeader)(unsafe.Pointer(&data2))
-	sh.Data = dllRawData
-	sh.Len = int(rSize)
-	sh.Cap = int(rSize)
-	err2 := ioutil.WriteFile("test.exe", data2, 0644)
-	if err2 != nil {
-		panic(err2)
-	}
+	//var data2 []byte
+	//sh := (*reflect.SliceHeader)(unsafe.Pointer(&data2))
+	//sh.Data = dllRawData
+	//sh.Len = int(rSize)
+	//sh.Cap = int(rSize)
+	//err2 := ioutil.WriteFile("test.exe", data2, 0644)
+	//if err2 != nil {
+	//	panic(err2)
+	//}
 	mappedDll := _LoadPEModule(dllRawData, rSize, vSize, false, false)
 	FreePEBuffer(dllRawData, 0)
 	return mappedDll
