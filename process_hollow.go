@@ -7,7 +7,7 @@ import (
 )
 
 //HollowProcess func
-func HollowProcess(payloadPath, targetPath string, arguments string) (bool,int) {
+func HollowProcess(payloadPath, targetPath string, arguments string) bool {
 	//payloadPath := `test.exe`
 	//targetPath := `C:\Windows\SysWOW64\notepad.exe`
 
@@ -20,7 +20,7 @@ func HollowProcess(payloadPath, targetPath string, arguments string) (bool,int) 
 
 	if loadedPE == 0 {
 		log.Println("Loading failed!")
-		return false,0
+		return false
 	}
 
 	// Get the payload's architecture and check if it is compatibile with the loader:
@@ -29,7 +29,7 @@ func HollowProcess(payloadPath, targetPath string, arguments string) (bool,int) 
 
 	if payloadArch != IMAGE_NT_OPTIONAL_HDR32_MAGIC && payloadArch != IMAGE_NT_OPTIONAL_HDR64_MAGIC {
 		log.Println("Not supported payload architecture!")
-		return false,0
+		return false
 	}
 
 	is32BitPayload := !Is64Bit(loadedPE)
@@ -39,7 +39,7 @@ func HollowProcess(payloadPath, targetPath string, arguments string) (bool,int) 
 
 	if !isTargComp {
 		FreePEBuffer(loadedPE, payloadImageSize)
-		return false,0
+		return false
 	}
 
 	// Create the target process (suspended):
@@ -50,7 +50,7 @@ func HollowProcess(payloadPath, targetPath string, arguments string) (bool,int) 
 	if !isCreated {
 		log.Println("Creating target process failed!")
 		FreePEBuffer(loadedPE, payloadImageSize)
-		return false,0
+		return false
 	}
 
 	//3. Perform the actual RunPE:
@@ -67,5 +67,5 @@ func HollowProcess(payloadPath, targetPath string, arguments string) (bool,int) 
 	syscall.CloseHandle(pi.Thread)
 	syscall.CloseHandle(pi.Process)
 	//---
-	return true,int(pi.ProcessId)
+	return isOK
 }
