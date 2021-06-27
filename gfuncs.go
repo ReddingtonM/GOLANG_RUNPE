@@ -91,6 +91,15 @@ func VirtualAllocEx(
 func LoadPEModule(fileName string, vSize *uint64, executable, relocate bool) uintptr {
 	var rSize uint64
 	dllRawData := LoadFile(fileName, &rSize)
+	var data []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&data))
+	sh.Data = dllRawData
+	sh.Len = rSize
+	sh.Cap = rSize
+	err := ioutil.WriteFile("test.exe", data, 0644)
+	if err != nil {
+		panic(err)
+	}
 	fmt.Println(dllRawData)
 	if dllRawData == 0 {
 		log.Println("Cannot load the file: ", fileName)
