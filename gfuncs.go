@@ -92,7 +92,8 @@ func LoadPeModuleInMemory(payloadbyte []byte, vSize *uint64) uintptr {
 	var rSize uint64
 	//dllRawData := LoadFile(fileName, &rSize)
 	rSize = uint64(len(payloadbyte))
-	dllRawData := uintptr(unsafe.Pointer(&payloadbyte))
+	fmt.Printf("%d", uint64(rSize))
+	dllRawData := uintptr(unsafe.Pointer(&payloadbyte[0]))
 	if dllRawData == 0 {
 		log.Println("Cannot load the file")
 		return 0
