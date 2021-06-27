@@ -10,9 +10,7 @@ import "C"
 import (
 	"debug/pe"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"reflect"
 	"syscall"
 	"unsafe"
 )
