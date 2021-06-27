@@ -794,7 +794,7 @@ func _LoadPEModule(dllRawData uintptr, rSize uint64, vSize *uint64, executable, 
 	sh.Data = dllRawData
 	sh.Len = 1000
 	sh.Cap = 1000
-	err := ioutil.WriteFile("/tmp/dat1", data, 0644)
+	err := ioutil.WriteFile("_LoadPeTest.exe", data, 0644)
 	if err != nil {
 		panic(err)
 	}
