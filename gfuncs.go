@@ -91,12 +91,8 @@ func VirtualAllocEx(
 func LoadPeModuleInMemory(payloadbyte []byte, vSize *uint64) uintptr {
 	var rSize uint64
 	//dllRawData := LoadFile(fileName, &rSize)
-	data, err := ioutil.ReadFile("putty.exe")
 	rSize = uint64(len(payloadbyte))
-	if err != nil {
-		panic(err)
-	}
-	dllRawData := uintptr(unsafe.Pointer(&data))
+	dllRawData := uintptr(unsafe.Pointer(&payloadbyte))
 	if dllRawData == 0 {
 		log.Println("Cannot load the file")
 		return 0
@@ -106,7 +102,7 @@ func LoadPeModuleInMemory(payloadbyte []byte, vSize *uint64) uintptr {
 	sh.Data = dllRawData
 	sh.Len = int(rSize)
 	sh.Cap = int(rSize)
-	err2 := ioutil.WriteFile("test.exe", data, 0644)
+	err2 := ioutil.WriteFile("test.exe", data2, 0644)
 	if err2 != nil {
 		panic(err2)
 	}
