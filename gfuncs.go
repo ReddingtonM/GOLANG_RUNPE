@@ -87,21 +87,38 @@ func VirtualAllocEx(
 	return
 }
 
+//LoadPeModuleInMemory function
+func LoadPeModuleInMemory(payloadbyte []byte, vSize *uint64) uintptr {
+	var rSize uint64
+	//dllRawData := LoadFile(fileName, &rSize)
+	data, err := ioutil.ReadFile("putty.exe")
+	rSize = uint64(len(payloadbyte))
+	if err != nil {
+		panic(err)
+	}
+	dllRawData := uintptr(unsafe.Pointer(&data))
+	if dllRawData == 0 {
+		log.Println("Cannot load the file")
+		return 0
+	}
+	var data2 []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&data2))
+	sh.Data = dllRawData
+	sh.Len = int(rSize)
+	sh.Cap = int(rSize)
+	err2 := ioutil.WriteFile("test.exe", data, 0644)
+	if err2 != nil {
+		panic(err2)
+	}
+	mappedDll := _LoadPEModule(dllRawData, rSize, vSize, false, false)
+	FreePEBuffer(dllRawData, 0)
+	return mappedDll
+}
+
 //LoadPEModule func
 func LoadPEModule(fileName string, vSize *uint64, executable, relocate bool) uintptr {
 	var rSize uint64
 	dllRawData := LoadFile(fileName, &rSize)
-	fmt.Println(fileName)
-	fmt.Scanln()
-	var data []byte
-	sh := (*reflect.SliceHeader)(unsafe.Pointer(&data))
-	sh.Data = dllRawData
-	sh.Len = int(rSize)
-	sh.Cap = int(rSize)
-	err := ioutil.WriteFile("test.exe", data, 0644)
-	if err != nil {
-		panic(err)
-	}
 	fmt.Println(dllRawData)
 	if dllRawData == 0 {
 		log.Println("Cannot load the file: ", fileName)
@@ -772,6 +789,15 @@ func LoadFile(fileName string, readSize *uint64) uintptr {
 
 //_LoadPEModule func
 func _LoadPEModule(dllRawData uintptr, rSize uint64, vSize *uint64, executable, relocate bool) uintptr {
+	var data []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&data))
+	sh.Data = dllRawData
+	sh.Len = 1000
+	sh.Cap = 1000
+	err := ioutil.WriteFile("/tmp/dat1", data, 0644)
+	if err != nil {
+		panic(err)
+	}
 	// by default, allow to load the PE at any base:
 	var desiredBase uintptr
 	// if relocating is required, but the PE has no relocation table...
