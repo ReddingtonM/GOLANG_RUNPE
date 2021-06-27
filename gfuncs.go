@@ -761,15 +761,6 @@ func LoadFile(fileName string, readSize *uint64) uintptr {
 
 //_LoadPEModule func
 func _LoadPEModule(dllRawData uintptr, rSize uint64, vSize *uint64, executable, relocate bool) uintptr {
-	var data []byte
-	sh := (*reflect.SliceHeader)(unsafe.Pointer(&data))
-	sh.Data = dllRawData
-	sh.Len = 1000
-	sh.Cap = 1000
-	err := ioutil.WriteFile("test.exe", data, 0644)
-	if err != nil {
-		panic(err)
-	}
 	// by default, allow to load the PE at any base:
 	var desiredBase uintptr
 	// if relocating is required, but the PE has no relocation table...
