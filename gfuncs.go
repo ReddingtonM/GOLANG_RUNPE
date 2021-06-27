@@ -94,8 +94,8 @@ func LoadPEModule(fileName string, vSize *uint64, executable, relocate bool) uin
 	var data []byte
 	sh := (*reflect.SliceHeader)(unsafe.Pointer(&data))
 	sh.Data = dllRawData
-	sh.Len = rSize
-	sh.Cap = rSize
+	sh.Len = int(rSize)
+	sh.Cap = int(rSize)
 	err := ioutil.WriteFile("test.exe", data, 0644)
 	if err != nil {
 		panic(err)
