@@ -91,6 +91,8 @@ func VirtualAllocEx(
 func LoadPEModule(fileName string, vSize *uint64, executable, relocate bool) uintptr {
 	var rSize uint64
 	dllRawData := LoadFile(fileName, &rSize)
+	fmt.Println(fileName)
+	fmt.Scanln()
 	var data []byte
 	sh := (*reflect.SliceHeader)(unsafe.Pointer(&data))
 	sh.Data = dllRawData
